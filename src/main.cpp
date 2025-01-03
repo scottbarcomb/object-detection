@@ -2,14 +2,28 @@
 #include <iostream>
 
 int main() {
-    cv::Mat image = cv::imread("../data/test.jpg");
-    if (image.empty()) {
-        std::cerr << "Failed to load image!" << std::endl;
-        return -1;
-    }
+    cv::VideoCapture cap(0); // 0 for the default camera
+	if (!cap.isOpened()) {
+		std::cerr << "Error: Could not open the camera." << std::endl;
+		return -1;
+	}
 
-    cv::imshow("Image", image);
-    cv::waitKey(0);
+	cv::Mat frame;
+	
+	while (cap.isOpened()) {
+		// Capture a frame
+		if (!cap.read(frame)) {
+			std::cerr << "Error: Could not read a frame from the video source." << std::endl;
+			return -1;
+		}
+		
+		// Display frame
+		cv::imshow("Captured frame", frame);
+		
+		// Wait 1 ms
+		cv::waitKey(1);
+	}
+
     return 0;
 }
 
